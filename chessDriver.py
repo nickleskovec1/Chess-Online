@@ -82,14 +82,14 @@ images = imagePrep()
 clock = pygame.time.Clock()
 while 1:
     clock.tick(4)
+	if str(turn) != net.id:
+	server_return = net.send(str(net.id) + "," + "update").split(",")
+	turn = int(server_return[3])
+	if str(turn) == net.id:
+		move(int(server_return[1]), game.board, int(server_return[2]), None)
+	continue
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
-        if str(turn) != net.id:
-            server_return = net.send(str(net.id) + "," + "update").split(",")
-            turn = int(server_return[3])
-            if str(turn) == net.id:
-                move(int(server_return[1]), game.board, int(server_return[2]), None)
-            continue
         if event.type == pygame.MOUSEBUTTONDOWN:
             x,y = event.pos
             print(x,y)
