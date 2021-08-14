@@ -7,7 +7,8 @@ def move(position, board, moveto, net):
     if board[position] == 0:
         return
     if board[position].can_move(moveto, board):
-        sendData(net, position, moveto)
+        if net is not None:
+            sendData(net, position, moveto)
         if board[moveto] != 0:
             board[moveto].x = 900
             board[moveto].y = 900
@@ -29,7 +30,16 @@ def returnHeight(position):
     return (position // 8) * 100
 
 def sendData(net, pos, moveto):
+    print(net.id)
     net.send(str(net.id) + "," + str(pos) + "," + str(moveto))
+
+@staticmethod
+def parse_data(data):
+    try:
+        d = data.split(",")
+        move(d[1], game.board, d[2], None)
+    except:
+        pass
 
 def imagePrep():
     b_rook = pygame.image.load("piece_sprites\\b_rook.png")
@@ -60,6 +70,7 @@ def imagePrep():
 
 #INITIALIZE NETWORK CODE
 net = Network()
+turn = 0
 
 isSelected = (False, 0, (0,0))
 game = Pieces.game()
@@ -68,10 +79,17 @@ size = 800, 800
 screen = pygame.display.set_mode(size)
 bg = pygame.image.load("piece_sprites\\board.png")
 images = imagePrep()
-
+clock = pygame.time.Clock()
 while 1:
+    clock.tick(4)
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
+        if str(turn) != net.id:
+            server_return = net.send(str(net.id) + "," + "update").split(",")
+            turn = int(server_return[3])
+            if str(turn) == net.id:
+                move(int(server_return[1]), game.board, int(server_return[2]), None)
+            continue
         if event.type == pygame.MOUSEBUTTONDOWN:
             x,y = event.pos
             print(x,y)
@@ -83,6 +101,10 @@ while 1:
                 print(isSelected[1], pos)
                 move(isSelected[1], game.board, pos, net)
                 game.print_board()
+                if turn == 0:
+                    turn = 1
+                elif turn == 1:
+                    turn = 0
                 isSelected = (False, 0)
             else:
                 isSelected = (True, pos, (x*100+2,y*100+2))
