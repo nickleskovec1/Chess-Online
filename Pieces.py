@@ -138,7 +138,7 @@ class rook:
     def __str__(self):
         return self.color + "_rook"
 
-    def isKing(self):
+    def isking(self):
         return False
 
     def can_move(self, position, board):
