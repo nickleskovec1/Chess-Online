@@ -80,14 +80,15 @@ screen = pygame.display.set_mode(size)
 bg = pygame.image.load("piece_sprites\\board.png")
 images = imagePrep()
 clock = pygame.time.Clock()
+f = 4
 while 1:
-    clock.tick(4)
-	if str(turn) != net.id:
-	server_return = net.send(str(net.id) + "," + "update").split(",")
-	turn = int(server_return[3])
-	if str(turn) == net.id:
-		move(int(server_return[1]), game.board, int(server_return[2]), None)
-	continue
+    clock.tick(f)
+    if str(turn) != net.id:
+        server_return = net.send(str(net.id) + "," + "update").split(",")
+        turn = int(server_return[3])
+        if str(turn) == net.id:
+            move(int(server_return[1]), game.board, int(server_return[2]), None)
+        continue
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -108,9 +109,9 @@ while 1:
                 isSelected = (False, 0)
             else:
                 isSelected = (True, pos, (x*100+2,y*100+2))
-        screen.fill((120,120,120))
-        screen.blit(bg,(0,0))
-        if isSelected[0]:
-            pygame.draw.rect(screen, (0,0,255), (isSelected[2][0],isSelected[2][1],96, 96))
-        drawPieces(screen, images)
-        pygame.display.flip()
+    screen.fill((120,120,120))
+    screen.blit(bg,(0,0))
+    if isSelected[0]:
+        pygame.draw.rect(screen, (0,0,255), (isSelected[2][0],isSelected[2][1],96, 96))
+    drawPieces(screen, images)
+    pygame.display.flip()
