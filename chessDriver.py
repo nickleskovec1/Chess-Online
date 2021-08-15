@@ -2,6 +2,7 @@ import Pieces
 import pygame
 import sys
 from network import Network
+import os.path
 
 def nextTurn(turn):
     if turn == 0:
@@ -79,18 +80,18 @@ def returnHeight(position):
     return (position // 8) * 100
 
 def imagePrep():
-    b_rook = pygame.image.load("piece_sprites\\b_rook.png")
-    b_knight = pygame.image.load("piece_sprites\\b_knight.png")
-    b_bishop = pygame.image.load("piece_sprites\\b_bishop.png")
-    b_king = pygame.image.load("piece_sprites\\b_king.png")
-    b_queen = pygame.image.load("piece_sprites\\b_queen.png")
-    b_pawn = pygame.image.load("piece_sprites\\b_pawn.png")
-    w_rook = pygame.image.load("piece_sprites\\w_rook.png")
-    w_knight = pygame.image.load("piece_sprites\\w_knight.png")
-    w_bishop = pygame.image.load("piece_sprites\\w_bishop.png")
-    w_king = pygame.image.load("piece_sprites\\w_king.png")
-    w_queen = pygame.image.load("piece_sprites\\w_queen.png")
-    w_pawn = pygame.image.load("piece_sprites\\w_pawn.png")
+    b_rook = pygame.image.load(os.path.join("piece_sprites", "b_rook.png"))
+    b_knight = pygame.image.load(os.path.join("piece_sprites", "b_knight.png"))
+    b_bishop = pygame.image.load(os.path.join("piece_sprites", "b_bishop.png"))
+    b_king = pygame.image.load(os.path.join("piece_sprites", "b_king.png"))
+    b_queen = pygame.image.load(os.path.join("piece_sprites", "b_queen.png"))
+    b_pawn = pygame.image.load(os.path.join("piece_sprites", "b_pawn.png"))
+    w_rook = pygame.image.load(os.path.join("piece_sprites", "w_rook.png"))
+    w_knight = pygame.image.load(os.path.join("piece_sprites", "w_knight.png"))
+    w_bishop = pygame.image.load(os.path.join("piece_sprites", "w_bishop.png"))
+    w_king = pygame.image.load(os.path.join("piece_sprites", "w_king.png"))
+    w_queen = pygame.image.load(os.path.join("piece_sprites", "w_queen.png"))
+    w_pawn = pygame.image.load(os.path.join("piece_sprites", "w_pawn.png"))
     images = {"b_rook": b_rook,
               "b_knight": b_knight,
               "b_bishop": b_bishop,
@@ -117,7 +118,7 @@ game = Pieces.game()
 pygame.init()
 size = 800, 800
 screen = pygame.display.set_mode(size)
-bg = pygame.image.load("piece_sprites\\board.png")
+bg = pygame.image.load(os.path.join("piece_sprites", "board.png"))
 images = imagePrep()
 clock = pygame.time.Clock()
 f = 60
