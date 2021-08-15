@@ -87,6 +87,9 @@ class bishop:
     def __str__(self):
         return self.color + "_bishop"
 
+    def isking(self):
+        return False
+
     def can_move(self, position, board):
         if position > self.position:
             if (position - self.position) % 9 == 0:
@@ -135,6 +138,9 @@ class rook:
     def __str__(self):
         return self.color + "_rook"
 
+    def isKing(self):
+        return False
+
     def can_move(self, position, board):
         incr = 0
         if position < self.position:
@@ -176,6 +182,9 @@ class queen(bishop, rook):
     def __str__(self):
         return self.color + "_queen"
 
+    def isking(self):
+        return False
+
     def can_move(self, position, board):
         if any(cls.can_move(self, position, board) for cls in queen.__bases__):
             return True
@@ -183,26 +192,36 @@ class queen(bishop, rook):
 
 
 class King:
-    def __init__(self, position, color, x, y, in_check = False):
+    def __init__(self, position, color, x, y, in_check = False, first_move = True):
         self.position = position
         self.color = color
         self.in_check = in_check
         self.x = x
         self.y = y
+        self.first_move = first_move
 
     def __str__(self):
         return self.color + "_king"
 
-    def can_move(self, position, board):
-        if position == self.position+1 or position == self.position-1 or position == self.position+8 or position == self.position-8:
+    def isking(self):
+        return True
+
+    def can_move(self, pos, board):
+        curpos = self.position
+        if board[pos] != 0:
+            if board[pos].color == self.color:
+                return False
+        if pos == curpos+1 or pos == curpos-1 or pos == curpos+8 or pos == curpos-8:
             if self.in_check:
                 if 1 == 0:  # TODO STUB, change to if the move does not put the king out of danger
                     return False
-                return True
-        if position == self.position+7 or position == self.position+9 or position == self.position-7 or position == self.position-9:
+            self.first_move = False
+            return True
+        if pos == curpos+7 or pos == curpos+9 or pos == curpos-7 or pos == curpos-9:
             if self.in_check:
                 if 1 == 0:  # TODO STUB, change to if the move does not put the king out of danger
                     return False
+            self.first_move = False
             return True
         return False
 
@@ -216,6 +235,9 @@ class Knight:
 
     def __str__(self):
         return self.color + "_knight"
+
+    def isking(self):
+        return False
 
     def can_move(self, position, board):
         if board[position] != 0:
@@ -245,6 +267,9 @@ class pawn():
 
     def __str__(self):
         return self.color + "_pawn"
+
+    def isking(self):
+        return False
 
     def can_move(self, position, board):
         if self.color == "w":

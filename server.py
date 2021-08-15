@@ -1,10 +1,10 @@
+"""Code from Tim Ruscica, modified by Nicholas Leskovec"""
 import socket
 from _thread import *
-import sys
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server = '10.0.0.227'
+server = '192.168.0.199'
 port = 5555
 
 server_ip = socket.gethostbyname(server)
@@ -19,57 +19,30 @@ s.listen(2)
 print("Waiting for a connection")
 
 currentId = "0"
-pos = ["0:50,50", "1:100,100"]
-previous_move = "-1,-1,-1"
-turn = 0
+players = []
 def threaded_client(conn):
-    global currentId, pos, previous_move, turn
+    global currentId, players
     conn.send(str.encode(currentId))
     currentId = "1"
     reply = ''
     while True:
-        # try:
-          data = conn.recv(2048)
-          reply = data.decode('utf-8')
-          if not data:
-              conn.send(str.encode("Goodbye"))
-              break
-          else:
-              print("Recieved: " + reply)
-              arr = reply.split(",")
-              id = int(arr[0])
-              if id == 0: nid = 1
-              if id == 1: nid = 0
-              if arr[1] == "update":
-                previous = previous_move.split(",")
-                if previous_move[0:2] == "-1":
-                  conn.send(str.encode("0,0,0,0"))
-                  continue
-                else:
-                  if int(previous[0]) == nid:
-                    reply = previous_move
-                    print("sending: " + reply)
-                    conn.sendall(str.encode(reply))
-                    continue
-                  elif int(previous[0]) == id:
-                    reply = previous_move
-                    print("Sending: " + reply)
-                    conn.sendall(str.encode(reply))
-                    continue
-              elif arr[1] != "update":
-                if turn == 0:
-                  turn = 1
-                else:
-                  turn = 0
-                previous_move = reply + "," + str(turn)
-          #     reply = str(nid) +
-          #     reply = pos[nid][:]
-          #     print("Sending: " + reply)
-          #
-          print("Sending: " + reply)
-          conn.sendall(str.encode(reply))
-        # except:
-        #     break
+        if len(players) < 2:
+            continue
+        data = conn.recv(2048)
+        reply = data.decode('utf-8')
+        if not data:
+            conn.send(str.encode("Goodbye"))
+            break
+        else:
+            print("Recieved: " + reply)
+            arr = reply.split(",")
+            id = int(arr[0])
+            if id == 0: nid = 1
+            if id == 1: nid = 0
+            reply = reply[2::]  # Shaves off the player ID and comma and sends to other player
+            print("Sending: " + reply + "to player" + str(nid))
+            players[nid].sendall(str.encode(reply))
+            continue
 
     print("Connection Closed")
     print(addr)
@@ -78,5 +51,6 @@ def threaded_client(conn):
 while True:
     conn, addr = s.accept()
     print("Connected to: ", addr)
+    players.append(conn)
 
     start_new_thread(threaded_client, (conn,))
