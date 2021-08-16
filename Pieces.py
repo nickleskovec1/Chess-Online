@@ -5,22 +5,22 @@ class game:
         self.board = []
         for i in range(64):
             self.board.append(0)
-        self.board[8] = pawn(8, "b", 0, 100)
-        self.board[9] = pawn(9, "b", 100, 100)
-        self.board[10] = pawn(10, "b", 200, 100)
-        self.board[11] = pawn(11, "b", 300, 100)
-        self.board[12] = pawn(12, "b", 400, 100)
-        self.board[13] = pawn(13, "b", 500, 100)
-        self.board[14] = pawn(14, "b", 600, 100)
-        self.board[15] = pawn(15, "b", 700, 100)
-        self.board[0] = rook(0, "b", 0, 0)
-        self.board[1] = Knight(1, "b", 100, 0)
-        self.board[2] = bishop(2, "b", 200, 0)
-        self.board[3] = queen(3, "b", 300, 0)
-        self.board[4] = King(4, "b", 400, 0)
-        self.board[5] = bishop(5, "b", 500, 0)
-        self.board[6] = Knight(6, "b", 600, 0)
-        self.board[7] = rook(7, "b", 700, 0)
+        self.board[8] = pawn(8, "B", 0, 100)
+        self.board[9] = pawn(9, "B", 100, 100)
+        self.board[10] = pawn(10, "B", 200, 100)
+        self.board[11] = pawn(11, "B", 300, 100)
+        self.board[12] = pawn(12, "B", 400, 100)
+        self.board[13] = pawn(13, "B", 500, 100)
+        self.board[14] = pawn(14, "B", 600, 100)
+        self.board[15] = pawn(15, "B", 700, 100)
+        self.board[0] = rook(0, "B", 0, 0)
+        self.board[1] = Knight(1, "B", 100, 0)
+        self.board[2] = bishop(2, "B", 200, 0)
+        self.board[3] = queen(3, "B", 300, 0)
+        self.board[4] = King(4, "B", 400, 0)
+        self.board[5] = bishop(5, "B", 500, 0)
+        self.board[6] = Knight(6, "B", 600, 0)
+        self.board[7] = rook(7, "B", 700, 0)
 
 
         self.board[48] = pawn(48, "w", 0, 600)
@@ -300,7 +300,7 @@ class pawn():
                 if board[position] != 0:
                     return False
                 return True
-        if self.color == "b":
+        if self.color == "B":
             if self.first_move and position == (self.position + 16):  # Handles first move to move 2 spaces
                 if board[self.position + 8] != 0 or board[position] != 0:
                     return False
@@ -317,7 +317,7 @@ class pawn():
             if position - self.position == 7 or position - self.position == 9:
                 if board[position] == 0:
                     return False
-                elif board[position].color == "b":
+                elif board[position].color == "B":
                     return False
                 else:
                     return True
