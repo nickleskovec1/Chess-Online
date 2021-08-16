@@ -175,10 +175,10 @@ def turn_timer(time, screen, other):
 
 
 #INITIALIZE NETWORK CODE
-#ip = input("Enter in Ip Address: ")
-#port = int(input("Enter in Port Number: "))
-ip = "192.168.0.199"
-port = 5555
+ip = input("Enter in Ip Address: ")
+port = int(input("Enter in Port Number: "))
+#ip = "192.168.0.199"
+#port = 5555
 net = Network(ip, port)
 turn = int(net.id)
 
