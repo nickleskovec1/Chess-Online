@@ -10,6 +10,7 @@ def nextTurn(turn):
     if turn == 1:
         return 0
 
+
 def attempt_castle_left(king, board):
     if not king.first_move:
         return False
@@ -21,16 +22,51 @@ def attempt_castle_left(king, board):
         return False
     return True
 
+
 def attempt_castle_right(king, board):
     if not king.first_move:
+        print("yo")
         return False
     if board[king.position+1] != 0 or board[king.position+2] != 0:
+        print("yo1")
         return False
     if board[king.position + 3] == 0 or type(board[king.position + 3]) != Pieces.rook:
+        print("yo2")
         return False
     if not board[king.position + 3].first_move:
+        print("yo3")
         return False
     return True
+
+def kingmove(position, board, moveto):
+    if board[position].isking():
+        if moveto == position + 2:
+            if attempt_castle_right(board[position], board):
+                # if board[moveto] != 0:
+                #     board[moveto.x] = 900
+                board[position].first_move = False
+                board[position + 1] = board[position + 3]
+                board[position + 1].x -= 200
+                board[position + 3].position = position + 1
+                board[position + 3] = 0
+                board[moveto] = board[position]
+                board[moveto].position = moveto
+                board[moveto].x = returnWidth(moveto)
+                board[position] = 0
+                return True
+        elif moveto == position - 2:
+            if attempt_castle_left(board[position], board):
+                board[position].first_move = False
+                board[position - 1] = board[position - 4]
+                board[position - 1].x += 300
+                board[position - 4].position = position - 1
+                board[position - 4] = 0
+                board[moveto] = board[position]
+                board[moveto].position = moveto
+                board[moveto].x = returnWidth(moveto)
+                board[position] = 0
+                return True
+    return False
 
 def move(position, board, moveto):
     if board[position] == 0:
@@ -38,14 +74,8 @@ def move(position, board, moveto):
     if colorToPlayer[net.id] != board[position].color:
         return False
     if board[position].can_move(moveto, board):
-        if board[position].isking():
-            if moveto == position + 2:
-                if attempt_castle_right(board[position], board):
-                    #TODO CASTLING
-                    pass
-                if attempt_castle_left(board[position], board):
-                    #TODO CASTLING
-                    pass
+        if kingmove(position, board, moveto):
+            return True
             #CHECK FOR CASTLEING
         if board[moveto] != 0:
             board[moveto].x = 900
@@ -59,6 +89,8 @@ def move(position, board, moveto):
     return False
 
 def force_move(position, board, moveto):
+    if kingmove(position, board, moveto):
+        return
     if board[moveto] != 0:
         board[moveto].x = 900
         board[moveto].y = 900

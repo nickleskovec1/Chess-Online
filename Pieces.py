@@ -129,11 +129,12 @@ class bishop:
 
 
 class rook:
-    def __init__(self, position, color, x, y):
+    def __init__(self, position, color, x, y, first_move=True):
         self.position = position
         self.color = color
         self.x = x
         self.y = y
+        self.first_move = first_move
 
     def __str__(self):
         return self.color + "_rook"
@@ -159,14 +160,17 @@ class rook:
             elif position < self.position:
                 incr = -1
         if incr == 0:
+            print("yo")
             return False  # Handles impossible movement of piece
         while temp_pos != position:
             temp_pos += incr
             if board[temp_pos] != 0:
                 if temp_pos != position:  # Running into a piece before final destination returns false
+                    print("yo1")
                     return False
                 elif temp_pos == position:
                     if board[position].color == self.color:  # Can't take your own pieces
+                        print("yo2")
                         return False
         return True
 
@@ -211,6 +215,9 @@ class King:
         if board[pos] != 0:
             if board[pos].color == self.color:
                 return False
+        if self.first_move:
+            if pos == curpos + 2 or pos == curpos - 2:
+                return True
         if pos == curpos+1 or pos == curpos-1 or pos == curpos+8 or pos == curpos-8:
             if self.in_check:
                 if 1 == 0:  # TODO STUB, change to if the move does not put the king out of danger
